@@ -1,7 +1,7 @@
 # flask/.github/CODEOWNERS
-/CLAUDE.md          @parkpulse/leads
-/.claude/           @parkpulse/leads
-/.github/           @parkpulse/leads
-/pyproject.toml     @parkpulse/leads
-/uv.lock            @parkpulse/leads
-/vendor/            @parkpulse/leads
+/CLAUDE.md          @guechanlee
+/.claude/           @guechanlee
+/.github/           @guechanlee
+/pyproject.toml     @guechanlee
+/uv.lock            @guechanlee
+/vendor/            @guechanlee
