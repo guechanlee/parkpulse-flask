@@ -1,0 +1,39 @@
+# flask — ParkPulse 놀이공원 인파·대기열 관제(분석 서버)
+
+명세 목록: @../parkpulse-docs/INDEX.md
+코드 컨벤션·패키지 구조: parkpulse-docs의 code-conventions.md, package-structure.md
+
+## 일하는 순서
+- 작업은 GitHub 이슈 하나 단위. 시작 전에 `gh issue view <번호>`로 이슈를 읽는다.
+- 이슈의 FNC·API ID에 해당하는 parkpulse-docs 섹션(features/analyzer.md, api/analyzer.md)을 읽고 나서 코드를 쓴다.
+- 명세와 다르게 만들어야 하면 멈추고 사람에게 묻는다. 명세를 임의로 해석하지 않는다.
+- 검수 기준은 테스트로 만든다.
+- 이슈 본문의 `## 넘겨받은 일`도 그 이슈에서 할 일이다(다른 이슈에서 미뤄 넘어온 일).
+- 선행 작업이 dev에 없어 처리 순서 일부를 미루면, 그 일을 맡을 열린 이슈 본문 끝 `## 넘겨받은 일`에 체크 항목(할 일, 출처 이슈·PR, 코드 위치)을 추가한다. 받을 이슈가 없으면 멈추고 사람에게 후속 이슈를 요청한다. PR 본문에는 넘긴 이슈 번호를 적는다.
+- 미룬 일을 코드 주석이나 다른 이슈의 코멘트로만 남기지 않는다. 작업을 시작하는 사람은 자기 이슈 본문만 읽기 때문이다.
+
+## 구조
+- 분석 서버(포트 5000, 경로 `/analyzer/v1/**`). 관리자 앱(시작·정지·ROI 지시)과 웹 서버(실시간 화면)만 접근한다.
+- 하는 일: 캠 영상에서 사람을 탐지하고(`DETECTOR`), 관심 영역(ROI) 안 인원을 1초마다 관리자 앱에 보낸다. 예상 대기시간·혼잡 단계 계산은 관리자 앱이 한다.
+- `src/parkpulse_flask/`: 앱 코드. `tests/`: 테스트. `vendor/yolo_crowd/`: 머리 탐지(`DETECTOR=head`)용 외부 코드, 수정하지 않는다.
+- `ops/`: 녹화 파일 정리·DB 백업 cron 스크립트(FNC-S-014·015). 분석 서버 앱과 따로 실행한다.
+- spring과는 HTTP 계약(api/analyzer.md)으로만 연결한다. 서로의 코드를 가져다 쓰지 않는다.
+
+## 명령
+- 설치: `uv sync` (`.env`는 `cp .env.example .env` 후 값 채움)
+- 실행: `uv run parkpulse-flask` (포트 5000, `.env`의 PORT. `.env`는 앱이 직접 읽음)
+- 테스트: `uv run pytest`
+- 의존성을 바꾸면 README의 `uv export` 두 줄로 requirements 파일을 다시 만든다.
+
+## 규칙
+- 키·토큰·경로는 환경변수로만. 새 변수는 .env.example에 이름만 추가한다.
+- 더미 영상·시연 데이터·가중치 파일(`*.pt`)은 커밋하지 않는다. 가중치 경로는 `YOLO_WEIGHTS`.
+
+## 트러블슈팅
+- 원인을 찾는 데 오래 걸렸거나 다른 팀원도 겪을 문제를 해결하면 `docs/troubleshooting/`에 기록한다. 기준·양식은 그 폴더의 README.md.
+- 원인을 확인하지 못했으면 '미확인(추정: …)'으로 쓴다. 비밀값은 쓰지 않는다.
+
+## git
+- 브랜치: feature/<이슈 번호>-<이름>. PR 대상은 항상 dev.
+- main·dev에 직접 push하지 않는다.
+- 커밋 메시지는 `parkpulse-docs/commit-convention.md`를 따른다.

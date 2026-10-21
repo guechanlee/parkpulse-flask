@@ -1,0 +1,7 @@
+# flask/.github/CODEOWNERS
+/CLAUDE.md          @<OWNER_ORG>/leads
+/.claude/           @<OWNER_ORG>/leads
+/.github/           @<OWNER_ORG>/leads
+/pyproject.toml     @<OWNER_ORG>/leads
+/uv.lock            @<OWNER_ORG>/leads
+/vendor/            @<OWNER_ORG>/leads

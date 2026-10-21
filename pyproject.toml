@@ -1,0 +1,28 @@
+[project]
+name = "parkpulse-flask"
+version = "0.1.0"
+description = "ParkPulse 분석 서버(놀이공원 인파·대기열 관제)"
+readme = "README.md"
+authors = [
+    { name = "guechanlee", email = "guechanlee@gmail.com" }
+]
+requires-python = "==3.12.*"
+dependencies = [
+    "flask>=3.1.3",
+    "python-dotenv>=1.0.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+]
+
+[project.scripts]
+parkpulse-flask = "parkpulse_flask:main"
+
+[build-system]
+requires = ["uv_build>=0.12.22,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
